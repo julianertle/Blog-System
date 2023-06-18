@@ -1,24 +1,38 @@
-# README
+# Project Name
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This README provides information about the project and the steps required to get it up and running.
 
-Things you may want to cover:
+## Table of Contents
 
-* Ruby version
+- [Ruby Version](#ruby-version)
+- [System Dependencies](#system-dependencies)
+- [Configuration](#configuration)
+- [Database Creation](#database-creation)
+- [Database Initialization](#database-initialization)
+- [Running the Test Suite](#running-the-test-suite)
 
-* System dependencies
+## Ruby Version
 
-* Configuration
+- Ruby version 3.2.2
 
-* Database creation
+## System Dependencies
 
-* Database initialization
+- Rails version 7.0.5
+- PostgreSQL database (yet not implemented)
 
-* How to run the test suite
+## Configuration
 
-* Services (job queues, cache servers, search engines, etc.)
+- Install necessary gems by running: `bundle install`
+- Configure the database settings in `config/database.yml` (not yet implemented)
 
-* Deployment instructions
+## Database Creation
 
-* ...
+- Run the following command to create the database: `rails db:create` (not yet implemented)
+
+## Database Initialization
+
+- Run the following command to run migrations and seed data: `rails db:migrate db:seed` (not yet implemented)
+
+## Running the Test Suite
+
+- Execute the following command to run the tests: `rails test` (not yet implemented)
