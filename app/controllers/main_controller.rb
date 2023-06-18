@@ -7,4 +7,8 @@ class MainController < ApplicationController
 
   def newpost
   end
+
+  def register
+  end
+
 end
