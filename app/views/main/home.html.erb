@@ -94,6 +94,7 @@
             // Update the post content
             postElement.querySelector('h3').innerHTML = updatedTitle;
             postElement.querySelector('p').innerHTML = updatedBody;
+
           });
         });
         postElement.appendChild(updateButton);
@@ -177,7 +178,7 @@
           <h3>This is a test post :)</h3>
           <p>Hello World :)</p>
           <button class="delete-button" onclick="deletePost(this)">DELETE</button>
-          <button class="update-button" onclick="updatePost(this)">UPDATE</button>
+          <button class="update-button" onclick="openUpdateForm('This is a test post :)', 'Hello World :)')">UPDATE</button>
         </div>
       </div>
     </div>
