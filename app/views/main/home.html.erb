@@ -1,19 +1,185 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <h1>Blog System</h1>
+    <style>
+      .centered-view {
+        max-width: 90%;
+        /* Adjust this value to your desired width */
+        margin: 20px auto 0;
+        /* Add 20px top margin, center horizontally */
+        padding: 20px;
+        /* Optional: Add some padding around the code section */
+        background-color: #f7f7f7;
+        /* Optional: Add a background color */
+        border: 1px solid #ddd;
+        /* Optional: Add a border */
+      }
+
+      .post-separator {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+      }
+
+      /* Custom CSS for posts */
+      .custom-post {
+        background-color: #f3f3f3;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+
+      .custom-post:first-child {
+        margin-top: 20px;
+      }
+
+      .custom-post h3 {
+        background-color: #e0e0e0;
+        padding: 8px;
+        margin-top: 0;
+        border-radius: 5px 5px 0 0;
+      }
+
+      .delete-button {
+        background-color: darkred;
+        color: white;
+      }
+
+      .update-button {
+        background-color: darkblue;
+        color: white;
+      }
+    </style>
+    <script src="https://cdn.tiny.cloud/1/zmjeckhvf49zja0pbxqnk5wwrqzk8da5lxjr5rrkwbynole5/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: '#body', // ID of the textarea for body content
+        plugins: 'advlist autolink lists link image charmap print preview',
+        toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+        menubar: false
+      });
+
+      function toggleForm() {
+        var form = document.getElementById('postForm');
+        var createButton = document.getElementById('createButton');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        createButton.style.display = createButton.style.display === 'none' ? 'block' : 'none';
+      }
+
+      function publishPost() {
+        var title = document.getElementById('title').value;
+        var body = tinymce.activeEditor.getContent();
+
+        // Perform your logic here to add the post to the list
+        var postList = document.getElementById('postList');
+        var postElement = document.createElement('div');
+        postElement.className = 'post-separator custom-post'; // Add custom CSS class
+        postElement.innerHTML = '<h3>' + title + '</h3><p>' + body + '</p>';
+
+        // Add DELETE and UPDATE buttons to the post
+        var deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-button';
+        deleteButton.innerHTML = 'DELETE';
+        deleteButton.addEventListener('click', function() {
+          postList.removeChild(postElement);
+        });
+        postElement.appendChild(deleteButton);
+
+        var updateButton = document.createElement('button');
+        updateButton.className = 'update-button';
+        updateButton.innerHTML = 'UPDATE';
+        updateButton.addEventListener('click', function() {
+          openUpdateForm(title, body, function(updatedTitle, updatedBody) {
+            // Update the post content
+            postElement.querySelector('h3').innerHTML = updatedTitle;
+            postElement.querySelector('p').innerHTML = updatedBody;
+          });
+        });
+        postElement.appendChild(updateButton);
+
+        // Insert the new post at the beginning of the post list
+        postList.insertBefore(postElement, postList.firstChild);
+
+        // Reset the form
+        document.getElementById('title').value = '';
+        tinymce.activeEditor.setContent('');
+
+        // Hide the form
+        toggleForm();
+      }
+
+      function openUpdateForm(title, body, callback) {
+        // Set the title and body in the update form
+        document.getElementById('updateTitle').value = title;
+        tinymce.get('updateBody').setContent(body);
+
+        // Show the update form
+        var updateForm = document.getElementById('updateForm');
+        updateForm.style.display = 'block';
+
+        // Replace the "PUBLISH" button with the "UPDATE" button
+        document.getElementById('updateButton').style.display = 'block';
+        document.getElementById('publishButton').style.display = 'none';
+
+        // Update the post when the "UPDATE" button is clicked
+        document.getElementById('updateButton').onclick = function() {
+          var updatedTitle = document.getElementById('updateTitle').value;
+          var updatedBody = tinymce.get('updateBody').getContent();
+
+          callback(updatedTitle, updatedBody);
+
+          // Reset the update form
+          document.getElementById('updateTitle').value = '';
+          tinymce.get('updateBody').setContent('');
+
+          // Hide the update form
+          updateForm.style.display = 'none';
+          document.getElementById('updateButton').style.display = 'none';
+          document.getElementById('publishButton').style.display = 'block';
+        };
+      }
+
+      function cancelPost() {
+        // Reset the form
+        document.getElementById('title').value = '';
+        tinymce.activeEditor.setContent('');
+
+        // Hide the form
+        toggleForm();
+      }
+    </script>
   </head>
   <body>
-    <button>
-      CREATE NEW POST
-    </button>
-    <table>
-      <tr>
-        <p>
-          test
-        </p>
-      </tr>
-    </table>
-    <p>Find me in app/views/main/home.html.erb</p>
+    <div class="centered-view">
+      <div>
+        <button class="btn btn-primary" id="createButton" onclick="toggleForm()">CREATE POST</button>
+      </div>
+      <div id="postForm" style="display: none;">
+        <input type="text" id="title" placeholder="Title" /><br />
+        <br />
+        <textarea id="body" placeholder="Body"></textarea>
+        <br />
+        <br />
+        <button class="btn btn-primary" id="publishButton" onclick="publishPost()">PUBLISH</button>
+        <button class="btn btn-secondary" onclick="cancelPost()">CANCEL</button>
+      </div>
+      <div id="updateForm" style="display: none;">
+        <input type="text" id="updateTitle" placeholder="Title" /><br />
+        <br />
+        <textarea id="updateBody" placeholder="Body"></textarea>
+        <br />
+        <br />
+        <button class="btn btn-primary" id="updateButton">UPDATE</button>
+      </div>
+      <div id="postList">
+        <div class="post-separator custom-post">
+          <h3>This is a test post :)</h3>
+          <p>Hello World :)</p>
+          <button class="delete-button" onclick="deletePost(this)">DELETE</button>
+          <button class="update-button" onclick="updatePost(this)">UPDATE</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
