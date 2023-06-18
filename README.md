@@ -22,8 +22,10 @@ This README provides information about the project and the steps required to get
 
 ## Configuration
 
-- Install necessary gems by running: `bundle install`
+- Install necessary gems by running: `bundle install
 - Configure the database settings in `config/database.yml` (not yet implemented)
+- Start the rails server with: `rails server
+- Open up a browser and enter this adress: `http://localhost:3000`
 
 ## Database Creation
 
